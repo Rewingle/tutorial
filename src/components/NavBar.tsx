@@ -18,8 +18,8 @@ const NavBar: React.FC = () => {
     return (
         <Menubar>
             <MenubarMenu>
-                <MenubarTrigger>File</MenubarTrigger>
-                <MenubarContent>
+                <MenubarTrigger><Link href={'/'}>Home</Link></MenubarTrigger>
+              {/*   <MenubarContent>
                     <MenubarItem>
                         New Tab <MenubarShortcut>⌘T</MenubarShortcut>
                     </MenubarItem>
@@ -28,11 +28,11 @@ const NavBar: React.FC = () => {
                     <MenubarItem>Share</MenubarItem>
                     <MenubarSeparator />
                     <MenubarItem>Print</MenubarItem>
-                </MenubarContent>
+                </MenubarContent> */}
 
             </MenubarMenu>
             <MenubarMenu>
-                <MenubarTrigger><Link href={'/about'}>About</Link></MenubarTrigger>
+                <MenubarTrigger><Link href={'/products'}>Products</Link></MenubarTrigger>
 
             </MenubarMenu>
             <MenubarMenu>

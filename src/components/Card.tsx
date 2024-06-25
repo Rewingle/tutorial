@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function Card(props: any) {
     return (
-        <Link href={`/about/${props.id}`}>
+        <Link href={`/products/${props.id}`}>
             <div className="rounded-md shadow-md grid-rows size-64 ">
                 <div className="bg-black rounded-md h-3/6">
                     <img src={props.image} alt={props.title} className="h-full w-full object-cover rounded-t-md" />
