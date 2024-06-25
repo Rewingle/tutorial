@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import Link from "next/link";
+import {create} from 'zustand';
+import { useCart } from "@/store/useCart"
+import NavBar from "@/components/NavBar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -14,9 +17,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+/*   const useStore = create((set) => ({
+    cartCount: 0,
+    increaseCartCount: () => set((state: any) => ({ cartCount: state.cartCount + 1 }))
+  })) */
+  //const cartCount = useCart(state=>state.cartCount)
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+
+      <body className={inter.className}>
+      <NavBar/>
+
+        <div className="flex items-center justify-center py-20">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
