@@ -35,7 +35,7 @@ const NavBar: React.FC = () => {
                 <MenubarTrigger onClick={()=>signOut()}>Logout</MenubarTrigger>
 
             </MenubarMenu>
-            <MenubarMenu>
+            <MenubarMenu >
                 <MenubarTrigger>{cartCount}</MenubarTrigger>
 
             </MenubarMenu>
