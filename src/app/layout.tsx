@@ -3,12 +3,11 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
-import { SessionProvider } from "next-auth/react";
 import SessionWrapper from "@/components/SessionWrapper";
-import { getServerAuthSession } from "@/actions/auth";
+/* import { getServerAuthSession } from "@/actions/auth"; */
 import UserInfo from "@/components/UserInfo";
 import Link from "next/link";
-
+import { auth } from "../auth"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,25 +43,31 @@ export default async function RootLayout({
       )
     } */
   /*   const authSession = await getServerAuthSession(); */
+  const session = await auth()
+
+/*   if (!session?.user) return null  */
 
   return (
-      <html lang="en">
-        <body className={inter.className}>
 
-          {/*  {!authSession?.user && (
+    <html lang="en">
+      <body className={inter.className}>
+
+        {/*  {!authSession?.user && (
           <Link className="font-medium mt-2 text-blue-600 hover:underline" href="/login">
             Login
           </Link>
-        )} */}
-          <NavBar />
-          {/*  {authSession?.user && 
+        )}
+        <NavBar />
+        {authSession?.user && 
         <UserInfo user={authSession.user} />
-        } */}
-          <div className="flex items-center justify-center py-20">
-            {children}
-          </div>
-          <Footer />
-        </body>
-      </html>
+        } */
+          session?.user ? <NavBar /> : null}
+        <div className="flex items-center justify-center py-20">
+          {children}
+        </div>
+        <Footer />
+      </body>
+    </html>
+
   );
 }

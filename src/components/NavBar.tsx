@@ -20,16 +20,7 @@ const NavBar: React.FC = () => {
         <Menubar>
             <MenubarMenu>
                 <MenubarTrigger><Link href={'/'}>Home</Link></MenubarTrigger>
-              {/*   <MenubarContent>
-                    <MenubarItem>
-                        New Tab <MenubarShortcut>⌘T</MenubarShortcut>
-                    </MenubarItem>
-                    <MenubarItem>New Window</MenubarItem>
-                    <MenubarSeparator />
-                    <MenubarItem>Share</MenubarItem>
-                    <MenubarSeparator />
-                    <MenubarItem>Print</MenubarItem>
-                </MenubarContent> */}
+       
 
             </MenubarMenu>
             <MenubarMenu>
