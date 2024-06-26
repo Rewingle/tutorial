@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/menubar"
 
 import { useCart } from '@/store/useCart'
+import { signOut } from 'next-auth/react';
 
 const NavBar: React.FC = () => {
 
@@ -40,7 +41,7 @@ const NavBar: React.FC = () => {
 
             </MenubarMenu>
             <MenubarMenu>
-                <MenubarTrigger>Logout</MenubarTrigger>
+                <MenubarTrigger onClick={()=>signOut()}>Logout</MenubarTrigger>
 
             </MenubarMenu>
             <MenubarMenu>
