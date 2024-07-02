@@ -1,11 +1,22 @@
 import AddToCart from "@/components/AddToCart";
 import { Button } from "@/components/ui/button";
+import { PrismaClient } from "@prisma/client";
+
 
 export default async function ProductInfo(props: any) {
     const sizes = ["XS", "S", "M", "L", "XL"]
 
-    const res = await fetch(`https://fakestoreapi.com/products/${props.id}`)
-    let product = await res.json();
+  /*   const res = await fetch(`https://fakestoreapi.com/products/${props.id}`)
+    let product = await res.json(); */
+    
+    const prisma = new PrismaClient();
+     const product = await prisma.product.findUnique(
+        {
+            where: {
+                id: props.id
+            }
+        }
+    ) 
     return (
         <>
             <div className="grid grid-rows-5 grid-cols-12 gap-20 h-full">
@@ -32,8 +43,8 @@ export default async function ProductInfo(props: any) {
 
                 </div>
                 <div className="row-span-4 col-span-6 pr-24">
-                    <AddToCart name={product.title} description={product.description} price={product.price} imageUrl={product.image} userId={"667a6b2358be6dc7927a79c0"} />
-                    <div>{product?.description}</div>
+{/*                     <AddToCart title={product?.title} description={product?.description} price={product?.price} imageUrl={product?.image} userId={"667a6b2358be6dc7927a79c0"} />
+ */}                    <div>{product?.description}</div>
                 </div>
 
             </div>

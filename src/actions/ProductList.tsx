@@ -1,4 +1,6 @@
 import Card from "@/components/Card";
+import { PrismaClient } from "@prisma/client";
+
 
 interface Product{
     id: number,
@@ -13,15 +15,19 @@ interface Product{
     }
 }
 
-export default async function ProductList(){
-    const res = await fetch('https://fakestoreapi.com/products')
-    let products = await res.json();
+const prisma = new PrismaClient();
 
+export default async function ProductList(){
+    //const res = await fetch('https://fakestoreapi.com/products')
+    
+    const data = await prisma.product.findMany();
+    //let products = await res.json();
+    console.log(data)
     return(
         
         <section className="flex items-center justify-center">
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products?.map((product:Product,key:any)=>(
+            {data?.map((product:any,key:any)=>(
                 <Card id={product.id.toString()} title={product.title} description={product.description} image={product.image} price={product.price}></Card>
             ))}
             </div>

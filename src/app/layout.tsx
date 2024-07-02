@@ -3,11 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
-import SessionWrapper from "@/components/SessionWrapper";
-/* import { getServerAuthSession } from "@/actions/auth"; */
-import UserInfo from "@/components/UserInfo";
-import Link from "next/link";
 import { auth } from "../auth"
+import { Login } from "@/components/Login";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,31 +18,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  /*   const useStore = create((set) => ({
-      cartCount: 0,
-      increaseCartCount: () => set((state: any) => ({ cartCount: state.cartCount + 1 }))
-    })) */
-  //const cartCount = useCart(state=>state.cartCount)
-  //const session = await getServerSession(authOptions)
-  /*   console.log(session?.user)
-    if(session){
-      return (
-        <SessionWrapper>
-          <html lang="en">
-            <body className={inter.className}>
-              <NavBar />
-    
-              <div>SESSION VAR</div>
-              <Footer />
-            </body>
-          </html>
-        </SessionWrapper>
-      )
-    } */
-  /*   const authSession = await getServerAuthSession(); */
+
   const session = await auth()
 
-/*   if (!session?.user) return null  */
+  /*   if (!session?.user) return null  */
 
   return (
 
@@ -63,7 +39,8 @@ export default async function RootLayout({
         } */
           session?.user ? <NavBar /> : null}
         <div className="flex items-center justify-center py-20">
-          {children}
+          {session?.user ? children : <Login />}
+
         </div>
         <Footer />
       </body>
