@@ -1,6 +1,6 @@
 import Card from "@/components/Card";
 import { PrismaClient } from "@prisma/client";
-
+import { auth } from "@/auth";
 
 interface Product{
     id: number,
@@ -15,11 +15,13 @@ interface Product{
     }
 }
 
-const prisma = new PrismaClient();
+
 
 export default async function ProductList(){
-    //const res = await fetch('https://fakestoreapi.com/products')
-    
+
+    const session = await auth()
+    if (!session?.user) return null
+    const prisma = new PrismaClient();
     const data = await prisma.product.findMany();
     //let products = await res.json();
     console.log(data)
