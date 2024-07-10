@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 //import { PrismaClient } from "@prisma/client";
 //import ProductInfo from "@/actions/ProductInfo";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface Product {
     id: string;
@@ -17,18 +18,6 @@ export default function Product({ params }: { params: { id: string } }) {
 
     const sizes = ["XS", "S", "M", "L", "XL"]
 
-    /*   const res = await fetch(`https://fakestoreapi.com/products/${props.id}`)
-      let product = await res.json(); */
-
-    /*   const prisma = new PrismaClient();
-       const product = await prisma.product.findUnique(
-          {
-              where: {
-                  id: params.id
-              }
-          }
-      )  */
-
     const [product, setProduct] = useState<Product | null>(null)
 
     useEffect(() => {
@@ -38,30 +27,29 @@ export default function Product({ params }: { params: { id: string } }) {
             await fetch('http://localhost:3000/api/product/getProduct', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id })
-
-            }).then(res => { res.json().then((data) => setProduct(data.product)) }).catch(
-                err => console.log('ERROR BUDUR ' + err)
-            )
+                body: JSON.stringify({ id: id }),
+                cache: 'force-cache',
+                next: {revalidate: 3600}
+            }).then(res => { res.json().then((data) => setProduct(data.product)) })
+                .catch(err => console.log('ERROR ' + err))
 
         }
         fetchProduct()
     }, [])
-    /*     const product = await ProductInfo({ id: params.id }) */
 
     return (
 
         <div className="grid grid-rows-5 grid-cols-12 gap-20 h-full">
-            <div className="row-span-5 col-span-6 bg-black h-full">
+            <div className="row-span-5 col-span-6 bg-white h-full">
                 <img src={product?.image} alt={product?.title} className="h-full w-full object-cover" />
             </div>
             <div className="row-span-1 col-span-6 pr-24">
                 <div>
                     <div className="font-bold text-2xl">
-                        {product?.title}
+                        {product?product.title:<Skeleton className="h-8 w-[700px]" />}
                     </div>
                     <div className="font-mono text-xl">
-                        {`${product?.price} $`}
+                        {product?`${product?.price} $`: <Skeleton className="h-8 w-[80px] mt-2" />}
                     </div>
                     <br />
                     <div className="flex ">
@@ -75,7 +63,7 @@ export default function Product({ params }: { params: { id: string } }) {
 
             </div>
             <div className="row-span-4 col-span-6 pr-24">
-                <div>{product?.description}</div>
+                <div>{product?product.description:<Skeleton className="h-24 w-[700px]" />}</div>
             </div>
 
         </div>

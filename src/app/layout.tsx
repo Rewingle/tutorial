@@ -28,18 +28,14 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
 
-        {/*  {!authSession?.user && (
-          <Link className="font-medium mt-2 text-blue-600 hover:underline" href="/login">
-            Login
-          </Link>
-        )}
-        <NavBar />
-        {authSession?.user && 
-        <UserInfo user={authSession.user} />
-        } */
+        {
           session?.user ? <NavBar /> : null}
         <div className="flex items-center justify-center py-20">
-          {session?.user ? children : <Login />}
+          {session?.user ? children :
+            <div className="h-full">
+              <Login />
+            </div>
+          }
 
         </div>
         <Footer />

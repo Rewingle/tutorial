@@ -12,20 +12,12 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 
 
 export function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmitCredentials = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
@@ -50,9 +42,17 @@ export function Login() {
             console.log(error)
         }
     }
+    const onSubmitGithub = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmitCredentials}>
                 <Card className="w-[350px] border-black">
                     <CardHeader>
                         <CardTitle>Login</CardTitle>
@@ -80,12 +80,12 @@ export function Login() {
 
             </form>
             <br />
-            <form /* action={
+            <form action={
                 async () => {
                     "use server"
                     await signIn('github')
                 }
-            } */>
+            }>
                 <Button type='submit' className='w-full justify-between'>
                     <span>Sign in with GitHub </span><span><FaGithub size={50} /></span>
 
