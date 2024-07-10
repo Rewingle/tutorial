@@ -1,13 +1,25 @@
+"use client"
 import { Button } from "@/components/ui/button";
-import { PrismaClient } from "@prisma/client";
-import ProductInfo from "@/actions/ProductInfo";
-export default async function Product({ params }: { params: { id: string } }) {
+//import { PrismaClient } from "@prisma/client";
+//import ProductInfo from "@/actions/ProductInfo";
+import { useEffect, useState } from "react";
+
+interface Product {
+    id: string;
+    title: string;
+    description: string;
+    price: number;
+    image: string;
+    category: string;
+}
+
+export default function Product({ params }: { params: { id: string } }) {
 
     const sizes = ["XS", "S", "M", "L", "XL"]
 
     /*   const res = await fetch(`https://fakestoreapi.com/products/${props.id}`)
       let product = await res.json(); */
-      
+
     /*   const prisma = new PrismaClient();
        const product = await prisma.product.findUnique(
           {
@@ -16,10 +28,29 @@ export default async function Product({ params }: { params: { id: string } }) {
               }
           }
       )  */
-    const product = await ProductInfo({id: params.id})
+
+    const [product, setProduct] = useState<Product | null>(null)
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            console.log(params.id)
+            const id = params.id
+            await fetch('http://localhost:3000/api/product/getProduct', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id })
+
+            }).then(res => { res.json().then((data) => setProduct(data.product)) }).catch(
+                err => console.log('ERROR BUDUR ' + err)
+            )
+
+        }
+        fetchProduct()
+    }, [])
+    /*     const product = await ProductInfo({ id: params.id }) */
 
     return (
-        <>
+
         <div className="grid grid-rows-5 grid-cols-12 gap-20 h-full">
             <div className="row-span-5 col-span-6 bg-black h-full">
                 <img src={product?.image} alt={product?.title} className="h-full w-full object-cover" />
@@ -44,10 +75,10 @@ export default async function Product({ params }: { params: { id: string } }) {
 
             </div>
             <div className="row-span-4 col-span-6 pr-24">
-                    <div>{product?.description}</div>
+                <div>{product?.description}</div>
             </div>
 
         </div>
-    </>
+
     )
 }
