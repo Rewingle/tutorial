@@ -1,9 +1,7 @@
 "use client"
 //import ProductList from "@/actions/ProductList"
 import Card from "@/components/Card";
-import { PrismaClient } from "@prisma/client";
-import { auth } from "@/auth";
-import { Suspense, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 
 interface Product {
     id: number,
@@ -20,7 +18,6 @@ interface Product {
 
 export default function Products() {
 
-
     const [products, setProducts] = useState<Product[] | null>(null)
     useEffect(() => {
         const fetchProducts = async () => {
@@ -36,15 +33,13 @@ export default function Products() {
 
     return (
         <section className="flex items-center justify-center">
-       
+
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <Suspense fallback={<div>ZAAA</div>}>
 
+                {products?.map((product: any, key: any) => (
+                    <Card key={product.id.toString()} id={product.id.toString()} title={product.title} description={product.description} image={product.image} price={product.price}></Card>
+                ))}
 
-                    {products?.map((product: any, key: any) => (
-                        <Card key={product.id.toString()} id={product.id.toString()} title={product.title} description={product.description} image={product.image} price={product.price}></Card>
-                    ))}
-                </Suspense>
             </div>
         </section>
     )

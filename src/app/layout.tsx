@@ -27,7 +27,6 @@ export default async function RootLayout({
 
     <html lang="en">
       <body className={inter.className}>
-
         {
           session?.user ? <NavBar /> : null}
         <div className="flex items-center justify-center py-20">
@@ -36,7 +35,6 @@ export default async function RootLayout({
               <Login />
             </div>
           }
-
         </div>
         <Footer />
       </body>

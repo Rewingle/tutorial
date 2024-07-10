@@ -1,5 +1,5 @@
 "use client"
-import { signIn } from '@/auth';
+
 import { Button } from './ui/button';
 import { FaGithub } from "react-icons/fa";
 import { Input } from "@/components/ui/input"
@@ -13,10 +13,11 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-
 export function Login() {
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     const onSubmitCredentials = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -27,6 +28,7 @@ export function Login() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    type: 'credentials',
                     email: email,
                     password: password
                 })
@@ -45,7 +47,15 @@ export function Login() {
     const onSubmitGithub = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'github'
+                })
+            })
         } catch (error) {
             console.log(error)
         }
@@ -80,12 +90,7 @@ export function Login() {
 
             </form>
             <br />
-            <form action={
-                async () => {
-                    "use server"
-                    await signIn('github')
-                }
-            }>
+            <form onSubmit={onSubmitGithub}>
                 <Button type='submit' className='w-full justify-between'>
                     <span>Sign in with GitHub </span><span><FaGithub size={50} /></span>
 

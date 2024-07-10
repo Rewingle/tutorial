@@ -1,30 +1,44 @@
 import { signIn } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest & { type: "credentials" | "github" }) {
     try {
-        const data = await request.json();
-        
-        const email = data.email;
-        const password = data.password;
+        const request = await req.json();
 
-        await signIn(
-            "credentials", {
-            email: email,
-            password: password
-            }
-        )
-        return new NextResponse(
-            JSON.stringify({
-                message: "Login successful!",
-            }),
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                status: 200,
-            }
-        );
+
+        switch (request.type) {
+            case "credentials":
+                await signIn(
+                    "credentials", {
+                    email: request.email,
+                    password: request.password
+                }
+                )
+                return new NextResponse(
+                    JSON.stringify({
+                        message: "Login successful!",
+                    }),
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        status: 200,
+                    }
+                );
+            case "github":
+                await signIn("github")
+                return new NextResponse(
+                    JSON.stringify({
+                        message: "Login successful!",
+                    }),
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        status: 200,
+                    }
+                );
+        }
     } catch (error) {
         console.log(error);
         return new NextResponse(
