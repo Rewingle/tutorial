@@ -14,6 +14,11 @@ import { redirect } from 'next/navigation';
 
 export default function Register() {
 
+  /*   const session = useSession()
+    if(!session){
+        redirect('/')
+    }
+ */
     const {
         register,
         handleSubmit,

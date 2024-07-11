@@ -6,6 +6,7 @@ import NavBar from "@/components/NavBar";
 import { auth } from "../auth"
 import { Login } from "@/components/Login";
 import { redirect } from "next/navigation";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,23 +26,17 @@ export default async function RootLayout({
   /*   if (!session?.user) return null  */
 
   return (
-
-    <html lang="en">
-      <body className={inter.className}>
-        {
-          session?.user ? <NavBar /> : null}
-        <div className="flex items-center justify-center py-20 h-full">
-         {/*  {session?.user ? children :
-            <div className="h-full">
-              <Login />
-
-            </div>
-          } */}
-          {children}
-        </div>
-        <Footer />
-      </body>
-    </html>
-
+    <SessionProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <NavBar />
+          <div className="flex items-center justify-center py-20 h-full">
+         
+            {children}
+          </div>
+          <Footer />
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

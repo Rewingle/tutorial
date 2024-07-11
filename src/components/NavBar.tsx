@@ -12,10 +12,12 @@ import {
 
 import { useCart } from '@/store/useCart'
 import { signOut } from 'next-auth/react';
+import { auth } from '@/auth';
+const NavBar = () => {
 
-const NavBar: React.FC = () => {
+    //const cartCount = useCart(state => state.cartCount)
+   /*  const session = await auth() */
 
-    const cartCount = useCart(state => state.cartCount)
     return (
         <Menubar>
             <MenubarMenu>
@@ -32,13 +34,10 @@ const NavBar: React.FC = () => {
 
             </MenubarMenu>
             <MenubarMenu>
-                <MenubarTrigger onClick={()=>signOut()}>Logout</MenubarTrigger>
+                <MenubarTrigger onClick={()=>signOut({callbackUrl:'/'})}>Logout</MenubarTrigger>
 
             </MenubarMenu>
-            <MenubarMenu >
-                <MenubarTrigger>{cartCount}</MenubarTrigger>
-
-            </MenubarMenu>
+        
         </Menubar>
     );
 };

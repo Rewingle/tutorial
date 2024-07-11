@@ -1,8 +1,8 @@
-"use client"
+
 import { Button } from '@/components/ui/button';
 import { FaGithub } from "react-icons/fa";
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+
 import {
     Card,
     CardContent,
@@ -11,99 +11,108 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import {redirect} from 'next/navigation';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { signIn, auth, providerMap } from '@/auth'
+import { AuthError } from 'next-auth';
 
-export function Login() {
+export default function Login() {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const onSubmitCredentials = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    type: 'credentials',
-                    email: email,
-                    password: password
+    /* 
+        const onSubmitCredentials = async (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+    
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: 'credentials',
+                        email: email,
+                        password: password
+                    })
                 })
-            })
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Failed to login:", errorData);
-                return;
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Failed to login:", errorData);
+                    return;
+                }
+                const data = await response.json();
+                console.log(data.message);
+            } catch (error) {
+                console.log(error)
             }
-            const data = await response.json();
-            console.log(data.message);
-        } catch (error) {
-            console.log(error)
         }
-    }
-    const onSubmitGithub = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    type: 'github'
+        const onSubmitGithub = async (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: 'github'
+                    })
                 })
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
+            } catch (error) {
+                console.log(error)
+            }
+        } */
     return (
-        <div>
-            <form onSubmit={onSubmitCredentials}>
-                <Card className="w-[350px] border-black">
-                    <CardHeader>
-                        <CardTitle>Login</CardTitle>
-                        <CardDescription>Start Shopping.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-
-                        <div className="grid w-full items-center gap-4">
-                            <div className="flex flex-col space-y-1.5">
-
-                                <Input onChange={(e) => setEmail(e.target.value)} id="name" placeholder="Email" />
-                            </div>
-                            <div className="flex flex-col space-y-1.5">
-
-                                <Input onChange={(e) => setPassword(e.target.value)} id="password" type='password' placeholder="Password" />
-                            </div>
-                        </div>
-
-                    </CardContent>
-                    <CardFooter className="flex justify-end">
-
-                        <Button type='submit'>Sign in</Button>
-                    </CardFooter>
-                </Card>
-
-            </form>
-            <br />
+        <>
             <div>
+                {Object.values(providerMap).map((provider) => (
+                    <form
+                        action={async () => {
+                            "use server"
+                            try {
+                                await signIn()
+                            } catch (error) {
+                                // Signin can fail for a number of reasons, such as the user
+                                // not existing, or the user not having the correct role.
+                                // In some cases, you may want to redirect to a custom error
+                                if (error instanceof AuthError) {
+                                    return redirect(`/login?error=${error.type}`)
+                                }
 
-                <form onSubmit={onSubmitGithub}>
-                    <Button type='submit' className='w-full justify-between'>
-                        <span>Sign in with GitHub </span><span><FaGithub size={50} /></span>
-
-                    </Button>
+                                // Otherwise if a redirects happens NextJS can handle it
+                                // so you can just re-thrown the error and let NextJS handle it.
+                                // Docs:
+                                // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
+                                throw error
+                            }
+                        }}
+                    >
+                        <Button type="submit">
+                            <span>Sign in with {provider.name}</span>
+                        </Button>
+                    </form>
+                ))}
+                <form action={async (formData) => {
+                    "use server"
+                    try {
+                        console.log(formData)
+                        await signIn("credentials", formData)
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }}>
+                    <Input id="email" placeholder="Email" />
+                    <Input id="password" type='password' placeholder="Password" />
+                    <Button type="submit">LOGIN</Button>
                 </form>
             </div>
-            <br/>
-            <Button className='w-full' variant={'outline'} onClick={() => redirect('/register')}>
-                <span>REGISTER</span>
-            </Button>
+            <br />
+            <Link href={'/register'}>
+                <Button className='w-full' variant={'outline'}>
+                    <span>REGISTER</span>
+                </Button>
+            </Link>
 
-        </div>
+
+        </>
     )
 }
