@@ -1,6 +1,5 @@
 "use client"
-
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import { FaGithub } from "react-icons/fa";
 import { Input } from "@/components/ui/input"
 import { useState } from "react"

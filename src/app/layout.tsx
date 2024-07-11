@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import { auth } from "../auth"
 import { Login } from "@/components/Login";
+import { redirect } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,12 +30,14 @@ export default async function RootLayout({
       <body className={inter.className}>
         {
           session?.user ? <NavBar /> : null}
-        <div className="flex items-center justify-center py-20">
-          {session?.user ? children :
+        <div className="flex items-center justify-center py-20 h-full">
+         {/*  {session?.user ? children :
             <div className="h-full">
               <Login />
+
             </div>
-          }
+          } */}
+          {children}
         </div>
         <Footer />
       </body>
